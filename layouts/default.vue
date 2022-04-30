@@ -4,15 +4,21 @@
 
 <style lang="less">  
   body {
-    background-color: var(--green);
+    background-color: var(--light-white);
     font-family: 'Fruktur', cursive;
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
   }
 
   :root {
-    --pink: #e44e8f;
-    --orange: #ff7f00;
-    --blue: #00819f;
-    --green: #7dc913;
-    --white: #f4f7f5;
+    --pink: #ffbcb5;
+    --orange: #fbd700;
+    --blue: #7cc8c3;
+    --green: #94d797;
+    --white: #fdf4e4;
+    --light-white: #fdf4e4;
+    --gray: #948f8f;
+    --dark-gray: #4d4d4d;
   }
 </style>

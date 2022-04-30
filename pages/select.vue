@@ -3,8 +3,8 @@
     <h1>MORDLE</h1>
     <div class="menu">
       <h3>Choose a gamemode:</h3>
-      <div v-for="gamemode in gamemodes">
-        <Card>
+      <div v-for="gamemode in gamemodes" v-bind:key="gamemode">
+        <Card @click="choose(gamemode)">
           <template #title>
             {{ gamemode.title }}
           </template>
@@ -54,9 +54,19 @@ export default {
     }
   },
   methods: {
-    submit(){
-      localStorage.setItem("nickname", this.nickname);
-      this.$router.push("/menu");
+    async choose(gamemode){
+      const mode = this.$route.query.mode;
+
+      if(mode === "custom"){
+        await this.$emit("customGameCreate", {
+          type: gamemode.identifier
+        }, (response) => {
+          console.log("response", response);
+          if(response && response.id){
+            this.$router.push(`/m/${gamemode.identifier}/${response.id}?share=true`);
+          }
+        });
+      }
     }
   }
 }

@@ -4,7 +4,7 @@
     <div class="menu">
       <h3>Hello {{ nickname }}!</h3>
       <div v-for="option in options">
-        <Card @click="choose">
+        <Card @click="choose(option)">
           <template #title>
             {{ option.title }}
           </template>
@@ -58,8 +58,8 @@ export default {
     this.nickname = localStorage.getItem("nickname");
   },
   methods: {
-    choose(){
-      this.$router.push("/select");
+    choose(option){
+      this.$router.push("/select?mode=" + option.identifier);
     }
   }
 }

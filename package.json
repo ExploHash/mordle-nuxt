@@ -12,8 +12,10 @@
     "nuxt": "3.0.0-rc.1"
   },
   "dependencies": {
+    "nuxt-socket-io": "^3.0.6",
     "primeicons": "^5.0.0",
     "primevue": "^3.12.6",
-    "simple-keyboard": "^3.4.89"
+    "simple-keyboard": "^3.4.89",
+    "socket.io-client": "^4.5.0"
   }
 }

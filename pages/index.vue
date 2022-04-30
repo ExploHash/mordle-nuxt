@@ -77,7 +77,19 @@ export default {
     submit(){
       localStorage.setItem("identifier", generateId(20));
       localStorage.setItem("nickname", this.nickname);
-      this.$router.push("/menu");
+
+      //Send register command
+      this.$socket2.emit("register", {
+        nickname: localStorage.getItem("nickname"),
+        identifier: localStorage.getItem("identifier")
+      });
+      
+      if(this.$route.query.redirect){
+        console.log(this.$route.query.redirect);
+        this.$router.push(this.$route.query.redirect);
+      }else{
+        this.$router.push("/menu");
+      }
     }
   }
 }
