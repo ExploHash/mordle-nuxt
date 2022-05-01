@@ -2,7 +2,7 @@
   <main>
     <h1>MORDLE</h1>
     <div class="menu">
-      <h3>Hello {{ nickname }}!</h3>
+      <h3>Welcome {{ nickname }}!</h3>
       <div v-for="option in options" v-bind:key="option">
         <Card @click="choose(option)">
           <template #title>
