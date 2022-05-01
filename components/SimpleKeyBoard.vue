@@ -11,16 +11,28 @@ export default {
   props: {
     input: {
       type: String
+    },
+    locatedLetters: {
+      type: Array
+    },
+    presentLetters: {
+      type: Array
+    },
+    missingLetters: {
+      type: Array
     }
   },
   data: () => ({
     layoutName: "wordle",
-    keyboard: null
+    keyboard: null,
+    oldlocatedLetters: [],
+    oldpresentLetters: [],
+    oldmissingLetters: []
   }),
   mounted() {
+    let ctx = this;
     setTimeout(() => {
       this.keyboard = new Keyboard(".keyboard", {
-        onChange: this.onChange,
         onKeyPress: this.onKeyPress,
         layout: {
           'wordle': [
@@ -31,36 +43,52 @@ export default {
         },
         layoutName: "wordle"
       });
-    }, 2000);
+      console.log("KANKER", this.keyboard);
+    }, 1000);
   },
   methods: {
-    onChange(input) {
-      this.$socket2.emit("onChange", input);
-    },
     onKeyPress(button) {
       this.$emit("onKeyPress", button);
-
-      /**
-       * If you want to handle the shift and caps lock buttons
-       */
-      if (button === "{shift}" || button === "{lock}") this.handleShift();
     },
-    handleShift() {
-      let currentLayout = this.keyboard.options.layoutName;
-      let shiftToggle = currentLayout === "default" ? "shift" : "default";
-
-      this.keyboard.setOptions({
-        layoutName: shiftToggle
+    updateKeyboard(){
+      console.log("WUUUUT");
+      ["located", "present", "missing"].forEach((key) => {
+        this.keyboard.removeButtonTheme(this["old" + key + "Letters"].join(" "), key);
+        this.keyboard.addButtonTheme(this[key + "Letters"].join(" "), key);
+        this["old" + key + "Letters"] = this[key + "Letters"];
       });
     }
   },
   watch: {
-    input(input) {
-      this.keyboard.setInput(input);
-    }
-  }
+    locatedLetters: function() {
+      this.updateKeyboard();
+    },
+    presentLetters: function() {
+      this.updateKeyboard();
+    },
+    missingLetters: function() {
+      this.updateKeyboard();
+    },
+  },
 };
 </script>
+
+<style lang="less">
+  .hg-button{
+    &.present{
+      background-color: var(--orange);
+    }
+    
+    &.missing{
+      background-color: var(--dark-gray);
+    }
+
+    &.located{
+      background-color: var(--green);
+    }
+
+  }
+</style>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

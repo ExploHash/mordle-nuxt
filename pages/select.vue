@@ -58,7 +58,8 @@ export default {
       const mode = this.$route.query.mode;
 
       if(mode === "custom"){
-        await this.$emit("customGameCreate", {
+        console.log("custom")
+        await this.$socket2.emit("customGameCreate", {
           type: gamemode.identifier
         }, (response) => {
           console.log("response", response);

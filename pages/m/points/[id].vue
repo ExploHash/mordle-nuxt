@@ -19,7 +19,7 @@
         <div class="board">
           <div class="board-row" v-for="rowIndex in 6" v-bind:key="rowIndex">
             <div class="board-letter" v-for="letterIndex in 5" v-bind:key="letterIndex">
-              <span v-if="opponentBoard.board[rowIndex - 1] && opponentBoard.board[rowIndex - 1][letterIndex - 1]" :class="{ present: opponentBoard.board[rowIndex - 1][letterIndex - 1].present, located: opponentBoard.board[rowIndex - 1][letterIndex - 1].located  }">{{ opponentBoard.board[rowIndex - 1][letterIndex - 1].letter }}</span>
+              <span v-if="opponentBoard.board[rowIndex - 1] && opponentBoard.board[rowIndex - 1][letterIndex - 1]" :class="{ present: opponentBoard.board[rowIndex - 1][letterIndex - 1].present, located: opponentBoard.board[rowIndex - 1][letterIndex - 1].located  }">{{ opponentBoard.board[rowIndex - 1][letterIndex - 1].value }}</span>
             </div>
           </div>
         </div>
@@ -33,13 +33,13 @@
         <div class="board">
           <div class="board-row" v-for="rowIndex in 6" v-bind:key="rowIndex">
             <div class="board-letter" v-for="letterIndex in 5" v-bind:key="letterIndex">
-              <span v-if="myBoard.board[rowIndex - 1] && myBoard.board[rowIndex - 1][letterIndex - 1]" :class="{ present: myBoard.board[rowIndex - 1][letterIndex - 1].present, located: myBoard.board[rowIndex - 1][letterIndex - 1].located  }">{{ myBoard.board[rowIndex - 1][letterIndex - 1].letter }}</span>
+              <span v-if="myBoard.board[rowIndex - 1] && myBoard.board[rowIndex - 1][letterIndex - 1]" :class="{ present: myBoard.board[rowIndex - 1][letterIndex - 1].present, located: myBoard.board[rowIndex - 1][letterIndex - 1].located  }">{{ myBoard.board[rowIndex - 1][letterIndex - 1].value }}</span>
             </div>
           </div>
         </div>
       </div>
       <div class="keyboard">
-        <SimpleKeyboard @onKeyPress="onKeyPress"/>
+        <SimpleKeyboard @onKeyPress="onKeyPress" :locatedLetters="myBoard.locatedLetters" :missingLetters="myBoard.missingLetters" :presentLetters="myBoard.presentLetters" />
       </div>
     </div>
   </main>
@@ -122,6 +122,7 @@
 
 <script>
 import SimpleKeyboard from "~/components/SimpleKeyBoard.vue";
+import { useToast } from "primevue/usetoast";
 
 export default {
   name: "App",
@@ -132,91 +133,98 @@ export default {
     showShareDialog: false,
     shareLink: "",
     opponentBoard: {
-      nickname: "Gert",
+      nickname: "Fuck",
       points: 200,
       game: 1,
       board: [
         [
-          {letter: "", present: true, located: true},
-          {letter: "", present: false, located: false},
-          {letter: "", present: false, located: false},
-          {letter: "", present: false, located: false},
-          {letter: "", present: false, located: false}
+          {value: "", present: true, located: true},
+          {value: "", present: false, located: false},
+          {value: "", present: false, located: false},
+          {value: "", present: false, located: false},
+          {value: "", present: false, located: false}
         ],
         [
-          {letter: "", present: true, located: true},
-          {letter: "", present: false, located: false},
-          {letter: "", present: true, located: false},
-          {letter: "", present: false, located: false},
-          {letter: "", present: true, located: false},
+          {value: "", present: true, located: true},
+          {value: "", present: false, located: false},
+          {value: "", present: true, located: false},
+          {value: "", present: false, located: false},
+          {value: "", present: true, located: false},
         ]
       ]
     },
     myBoard: {
-      nickname: "Skensha",
+      nickname: "Fack",
       points: 323,
       game: 2,
+      locatedLetters: [],
+      presentLetters: [],
       board: [
         [
-          {letter: "B", present: true, located: true},
-          {letter: "L", present: false, located: false},
-          {letter: "A", present: true, located: false},
-          {letter: "N", present: false, located: false},
-          {letter: "K", present: false, located: false}
+          {value: "B", present: true, located: true},
+          {value: "L", present: false, located: false},
+          {value: "A", present: true, located: false},
+          {value: "N", present: false, located: false},
+          {value: "K", present: false, located: false}
         ],
         [
-          {letter: "B", present: true, located: true},
-          {letter: "E", present: true, located: false},
-          {letter: "A", present: true, located: false},
-          {letter: "R", present: true, located: false},
-          {letter: "D", present: true, located: true}
+          {value: "B", present: true, located: true},
+          {value: "E", present: true, located: false},
+          {value: "A", present: true, located: false},
+          {value: "R", present: true, located: false},
+          {value: "D", present: true, located: true}
         ],
         [
-          {letter: "B", present: true, located: true},
-          {letter: "R", present: true, located: true},
-          {letter: "E", present: true, located: true},
-          {letter: "A", present: true, located: true},
-          {letter: "D", present: true, located: true},
+          {value: "B", present: true, located: true},
+          {value: "R", present: true, located: true},
+          {value: "E", present: true, located: true},
+          {value: "A", present: true, located: true},
+          {value: "D", present: true, located: true},
         ]
       ]
     }
   }),
   methods: {
-    onKeyPress(button) {
-      
+    onKeyPress(character) {
+      this.$socket2.emit("inputPointsGame", {
+        gameId: this.$route.params.id,
+        character
+      });
     }
-  },
-  copyLink() {
-    
   },
   mounted(){
     //Check for share dialog
-    console.log("FUCK", this.$route.query.share);
     if(this.$route.query.share){
-      console.log("HEY");
       this.showShareDialog = true;
       this.shareLink = "http://localhost:3000/join/" + this.$route.params.id;
-      //Focus
-      setTimeout(() => {
-        document.querySelector(".share-link").focus();
-      }, 100);
     }
+
+    const nickname = localStorage.getItem("nickname");
+    
     //Subscribe to game events
-    this.$socket.on("gameUpdate", (data) => {
-      console.log("gameUpdate", data);
+    this.$socket.on("pointsGameUpdate", (data) => {
+      console.log("pointsGameUpdate", data);
+      if(data.nickname === nickname){
+        this.myBoard = data;
+      }else{
+        this.opponentBoard = data;
+      }
+    });
+
+    this.$socket.on("pointsStateUpdate", (data) => {
+      // alert(data);
+      console.log(data);
       // this.opponentBoard = data.opponentBoard;
       // this.myBoard = data.myBoard;
     });
 
-    this.$socket.on("boardUpdate", (data) => {
-      console.log("boardUpdate", data);
-      // this.opponentBoard = data.opponentBoard;
-      // this.myBoard = data.myBoard;
+    this.$socket.on("pointsGameMessage", (data) => {
+      console.log("pointsGameMessage", data);
+      alert(data);
     });
 
-    //Try joining
-    this.$socket2.emit("joinGame", {
-      nickname: "Skensha"
+    this.$socket2.emit("joinPointsGame", {
+      id: this.$route.params.id
     });
   }
 };
