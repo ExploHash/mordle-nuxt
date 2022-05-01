@@ -196,7 +196,7 @@ export default {
     //Check for share dialog
     if(this.$route.query.share){
       this.showShareDialog = true;
-      this.shareLink = "http://localhost:3000/join/" + this.$route.params.id;
+      this.shareLink = "http://mordle.nykaworks.com/join/" + this.$route.params.id;
     }
 
     const nickname = localStorage.getItem("nickname");
