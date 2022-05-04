@@ -45,11 +45,11 @@ export default {
           identifier: "points",
           description: "Play 3 wordles for points. You get points for guessing the word early or getting letters right. The game ends when you both are finished."
         },
-        {
-          title: "Speed",
-          identifier: "speed",
-          description: "Play 5 wordles. You get a point everytime you guess the word first. The person with the most points wins"
-        }
+        // {
+        //   title: "Speed",
+        //   identifier: "speed",
+        //   description: "Play 5 wordles. You get a point everytime you guess the word first. The person with the most points wins"
+        // }
       ]
     }
   },

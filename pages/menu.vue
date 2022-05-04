@@ -41,11 +41,11 @@ export default {
     return {
       nickname: "",
       options: [
-        {
-          title: "Quickplay",
-          identifier: "quick",
-          description: "Find a game with a random stranger"
-        },
+        // {
+        //   title: "Quickplay",
+        //   identifier: "quick",
+        //   description: "Find a game with a random stranger"
+        // },
         {
           title: "Create a game",
           identifier: "custom",
