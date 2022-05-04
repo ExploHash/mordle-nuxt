@@ -5,7 +5,10 @@ import { io } from "socket.io-client";
 export default defineNuxtPlugin((nuxtApp) => {
   const socket = io(window.location.hostname + ":6969");
   socketInstance = socket;
+
   socket.on("connect", () => {
+    console.log("IDDDDDD", socket.id);
+    console.log("IBBBBBB", socket.id);
     if (localStorage.getItem("nickname") && localStorage.getItem("identifier")) {
       console.log("Emiting register") 
       socket.emit("register", {
@@ -15,11 +18,14 @@ export default defineNuxtPlugin((nuxtApp) => {
         console.log("Registred yay");
         console.log(drainQueue);
         console.log(queue)
+        registered = true;
         queue.forEach((args) => {
           console.log("drain");
           socket.emit(...args);
         });
       });
+    }else{
+      registered = true;
     }
   })
 
@@ -35,7 +41,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   }
 });
 
-const registered = false;
+let registered = false;
 let socketInstance;
 const queue = [];
 

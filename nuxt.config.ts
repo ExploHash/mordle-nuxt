@@ -7,6 +7,8 @@ export default defineNuxtConfig({
       '~/components',
     ]
   },
+  // target: 'static',
+  ssr: false,
   css: [
     'primevue/resources/themes/saga-blue/theme.css',
     'primevue/resources/primevue.css',
