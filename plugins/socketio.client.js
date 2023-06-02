@@ -3,10 +3,10 @@ import { io } from "socket.io-client";
 
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const socket = io("https://api.mordle.nykaworks.com", {
+  const socket = io("https://api-mordle.nykaworks.com", {
     secure: true,
   });
-  
+
   socketInstance = socket;
 
   socket.on("connect", () => {
