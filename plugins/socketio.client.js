@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const socket = io(window.location.hostname + ":6969");
+  const socket = io("https://api.mordle.nykaworks.com", {
   socketInstance = socket;
 
   socket.on("connect", () => {
