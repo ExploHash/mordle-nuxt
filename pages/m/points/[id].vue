@@ -47,75 +47,71 @@
 
 <style lang="less">
   .points-game {
-    // min-height: 100vh;
-    height: 100vh;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    * {
-      flex-grow: 1;
-    }
+    height: 100vh; // Set the game to full viewport height
+
     .points-card {
-      border-bottom: 1px solid black;
+      flex: 1; // Adjusts the flex value so both cards and keyboard share the viewport height proportionally
+      overflow: auto; // Allows content to scroll within the card if it overflows its container
       .header {
-        width: 100%;
         display: flex;
         justify-content: space-between;
         margin-bottom: 10px;
-
-        * {
-          flex-basis: 0;
-        }
-
-        .nickname {
-          text-align: left;
-        }
-
-        .points {
-          text-align: center;
-        }
-
-        .game {
-          text-align: right;
-        }
       }
       .board {
-        // height: 90%;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
         .board-row {
-          // flex-grow: 1;
           display: flex;
           flex-direction: row;
           justify-content: flex-start;
           .board-letter {
-            width: 10vw;
-            height: 10vw;
-            background-color: var(--gray);
-            border: 1px solid black;
-            display: inline-block;
+            width: 5vh;
+            height: 5vh;
+            max-width: 60px; // Sets a maximum size so it doesn't become too large on bigger screens
+            max-height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             span {
-              background-color: var(--dark-gray);
-              display: block;
               width: 100%;
               height: 100%;
-              text-align: center;
-              font-size: 7vw;
-              line-height: 10vw;
-
-              &.present{
-                background-color: var(--orange);
-              }
-              &.located{
-                background-color: var(--green);
-              }
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              font-size: 4vh;
+              max-font-size: 35px; // Sets a maximum font size for bigger screens
             }
           }
         }
       }
+    }
+  
+    .keyboard {
+      flex: 0 0 auto; // Do not expand or shrink the keyboard
+      display: flex;
+      justify-content: center; // Align keyboard in the center
+      padding: 1em; // Add some padding around the keyboard
+    }
+  }
+
+  // Media queries for desktop layout adjustments
+  @media (min-width: 1024px) {
+    .keyboard {
+      max-width: 500px; // A reasonable max width for the keyboard on wide screens
+      margin: 0 auto; // Center the keyboard horizontally
+    }
+    .points-card {
+      width: 500px;
+      // max-width: 500px; // A reasonable max width for the cards on wide screens
+    }
+    // Center
+    .points-game {
+      align-items: center;
     }
   }
 </style>
@@ -133,8 +129,8 @@ export default {
     showShareDialog: false,
     shareLink: "",
     opponentBoard: {
-      nickname: "Fuck",
-      points: 200,
+      nickname: "-",
+      points: 0,
       game: 1,
       board: [
         [
@@ -154,32 +150,32 @@ export default {
       ]
     },
     myBoard: {
-      nickname: "Fack",
-      points: 323,
-      game: 2,
+      nickname: "-",
+      points: 0,
+      game: 1,
       locatedLetters: [],
       presentLetters: [],
       board: [
         [
-          {value: "B", present: true, located: true},
-          {value: "L", present: false, located: false},
-          {value: "A", present: true, located: false},
-          {value: "N", present: false, located: false},
-          {value: "K", present: false, located: false}
+          {value: "", present: true, located: true},
+          {value: "", present: false, located: false},
+          {value: "", present: true, located: false},
+          {value: "", present: false, located: false},
+          {value: "", present: false, located: false}
         ],
         [
-          {value: "B", present: true, located: true},
-          {value: "E", present: true, located: false},
-          {value: "A", present: true, located: false},
-          {value: "R", present: true, located: false},
-          {value: "D", present: true, located: true}
+          {value: "", present: true, located: true},
+          {value: "", present: true, located: false},
+          {value: "", present: true, located: false},
+          {value: "", present: true, located: false},
+          {value: "", present: true, located: true}
         ],
         [
-          {value: "B", present: true, located: true},
-          {value: "R", present: true, located: true},
-          {value: "E", present: true, located: true},
-          {value: "A", present: true, located: true},
-          {value: "D", present: true, located: true},
+          {value: "", present: true, located: true},
+          {value: "", present: true, located: true},
+          {value: "", present: true, located: true},
+          {value: "", present: true, located: true},
+          {value: "", present: true, located: true},
         ]
       ]
     }

@@ -1,5 +1,4 @@
 <template>
-  <div class="keyboard"></div>
 </template>
 
 <script>
@@ -43,7 +42,6 @@ export default {
         },
         layoutName: "wordle"
       });
-      console.log("KANKER", this.keyboard);
     }, 1000);
   },
   methods: {
