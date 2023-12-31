@@ -74,6 +74,7 @@
             height: 5vh;
             max-width: 60px; // Sets a maximum size so it doesn't become too large on bigger screens
             max-height: 60px;
+            background-color: var(--gray);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -84,7 +85,15 @@
               justify-content: center;
               align-items: center;
               font-size: 4vh;
+              background-color: var(--dark-gray);
               max-font-size: 35px; // Sets a maximum font size for bigger screens
+
+              &.present{
+                background-color: var(--orange);
+              }
+              &.located{
+                background-color: var(--green);
+              }
             }
           }
         }
