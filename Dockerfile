@@ -1,23 +1,31 @@
-# Use the official Node.js 14 image as the base image
-FROM node:16
+# --- Stage 1: Build ---
+FROM node:16 as builder
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy the package.json and package-lock.json files to the container
-COPY package*.json ./
-
 # Install dependencies
-RUN npm install
+COPY package*.json ./
+RUN npm ci
 
-# Copy the entire project directory to the container
+# Copy app files
 COPY . .
 
-# Build the Nuxt.js application
+# Build the Nuxt app
 RUN npm run build
 
-# Expose the application port (change it if necessary)
+
+# --- Stage 2: Runtime ---
+FROM node:16-slim as runner
+
+WORKDIR /app
+
+# Copy ONLY the build output from builder
+COPY --from=builder /app/.output ./
+
+# Optional but safer: re-install only production deps (if needed)
+# COPY --from=builder /app/package*.json ./
+# RUN npm ci --omit=dev
+
 EXPOSE 3000
 
-# Set the command to run the application
-CMD [ "npm", "start" ]
+CMD ["node", "server/index.mjs"]
