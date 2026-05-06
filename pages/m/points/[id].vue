@@ -50,7 +50,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100vh; // Set the game to full viewport height
+    height: 100vh; // Fallback for browsers without dvh support
+    height: 100dvh; // Accounts for mobile address bar so the keyboard isn't clipped
 
     .points-card {
       flex: 1; // Adjusts the flex value so both cards and keyboard share the viewport height proportionally
